@@ -1,12 +1,13 @@
 package com.PMS.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
@@ -21,7 +22,7 @@ public class PMS_App_Controller {
     PMS_AddServices pms_addServices;
 
     @PostMapping ("/addPizza")
-    public ResponseEntity<AddResponse> addpizza (@RequestBody PMS_Beans pms)
+    public ResponseEntity<AddResponse> addPizza (@RequestBody PMS_Beans pms)
     {
         HttpHeaders headers = new HttpHeaders(); //For Adding Headers in the response
         AddResponse add = new AddResponse();
@@ -34,10 +35,8 @@ public class PMS_App_Controller {
             //In order to get response body we need to create one bean class for add response
 
             headers.add("Unique", id);
-
             add.setId(id);
             add.setResponse_msg("Success: New Pizza Added");
-
             return new ResponseEntity<AddResponse>(add, headers, HttpStatus.CREATED);
         }
         else
@@ -48,13 +47,28 @@ public class PMS_App_Controller {
         return new ResponseEntity<AddResponse>(add,headers,HttpStatus.ACCEPTED);
     }
 
-    @GetMapping ("/getPizza/{id}")
-    public PMS_Beans getProdId (@PathVariable(value = "id")String id){
+    @GetMapping ("/getPizza/{prodId}")
+    public PMS_Beans getProdId (@PathVariable(value = "prodId")String id)
+    {
+        try
+        {
+            PMS_Beans pms = repo.findById(id).get();
+            return pms;
+        }
+        catch (Exception e)
+        {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
 
-        PMS_Beans pms = repo.findById(id).get();
-        return pms;
 
     }
+
+    @GetMapping ("/getPizza")
+    public List<PMS_Beans> getPizzaByName (@RequestParam(value = "productName")String prod_Name)
+    {
+        return repo.findAllByProdName(prod_Name);
+    }
+
 
 
 }
