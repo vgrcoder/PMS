@@ -69,6 +69,30 @@ public class PMS_App_Controller {
         return repo.findAllByProdName(prod_Name);
     }
 
+    @PutMapping ("/updatePizza/{prodId}")
+    public ResponseEntity<PMS_Beans> updatePizzaPrice (@PathVariable(value = "prodId")String id,@RequestBody PMS_Beans pmsBeans)
+    {
+        PMS_Beans pro_price = repo.findById(id).get();
+        pro_price.setProductName(pmsBeans.getProductName());
+        pro_price.setProductPrice(pmsBeans.getProductPrice());
+        repo.save(pro_price);
+        return new ResponseEntity<PMS_Beans>(pro_price,HttpStatus.OK);
+    }
+
+    @DeleteMapping ("/deletePizza")
+    public ResponseEntity<String> deletePizza (@RequestBody PMS_Beans pmsBeans)
+    {
+        PMS_Beans delPizza = repo.findById(pmsBeans.getProdId()).get();
+        repo.delete(delPizza);
+        return new ResponseEntity<>("Employee Record Deleted", HttpStatus.CREATED);
+    }
+
+    @DeleteMapping ("/deleteAllProd")
+    public ResponseEntity<String> deleteAllProd()
+    {
+        repo.deleteAll();
+        return new ResponseEntity<>("",HttpStatus.GONE);
+    }
 
 
 }

@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PMS_Repo_Impl implements PMS_Custom_Repo
+public class PMS_RepoImpl implements PMS_Custom_Repo
 {
     @Autowired
     PMS_Repo repo;
