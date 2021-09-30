@@ -28,7 +28,7 @@ public class PMS_App_Controller {
         AddResponse add = new AddResponse();
         String id = pms.getProductName() + counter.getAndIncrement(); //
 
-        if(!pms_addServices.checkEmpAlreadyAdded(id))
+        if(!pms_addServices.checkPizzaAlreadyAdded(id))
         {
             pms.setProdId(id);
             repo.save(pms);
@@ -43,8 +43,9 @@ public class PMS_App_Controller {
         {
             add.setId(id);
             add.setResponse_msg("Pizza Already Added");
+            return new ResponseEntity<AddResponse>(add,headers,HttpStatus.ACCEPTED);
         }
-        return new ResponseEntity<AddResponse>(add,headers,HttpStatus.ACCEPTED);
+
     }
 
     @GetMapping ("/getPizza/{prodId}")

@@ -10,7 +10,7 @@ public class PMS_AddServices
     @Autowired
     PMS_Repo repo;
 
-    public boolean checkEmpAlreadyAdded(String id)
+    public boolean checkPizzaAlreadyAdded(String id)
     {
         Optional <PMS_Beans> pms= repo.findById(id);
         if(pms.isPresent())
